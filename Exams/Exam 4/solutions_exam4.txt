@@ -1,0 +1,124 @@
+Tiffany Tang
+tt2405
+
+1. B process
+
+2. D buddy system
+
+3. C DHCP
+
+4. semaphores
+
+5. iterative
+
+6. NAT exists in every IPv4 router. Your address in the personal host server will be 
+converted into the subnet address when exiting throught the NAT device. THe network has a public
+IP address of 8.8.8.8 which means that all packet's (from any device in its subnet) exiting will
+have an IP address header of 8.8.8.8 instead of private IP of 10.1.1.3.
+Since this is a TCP connection, it will be the beginning of a 3
+way handshake, so the server would respond with a SYN ACK to the IP address of 8.8.8.8 (networks public address)
+
+7. Batch multiprogramming is not possible in todays computers because we have fundamental mutual exclusion
+protection in our hardware. One example of this is the system bus- one process can be used at a time.
+Today, we can create hybrid threads- where we take an important thread, put it on a kernel level thread
+and tie this with multiple user level threads to create a lightweight process- which will simulate
+running multiple threads at the same time. 
+
+8. The biggest downside of using threads in a program is the potential for asynchrony. 
+This is occurs when the assumption that every thread is going to execute in one atomic instruction, 
+when in reality a thread can be pulled for any reason, and another thread can be put on. 
+This becomes an issue if a thread is interrupted while it is executing in the critical section
+of a piece of code. You can end up with corrupted data because of this. 
+
+9. Caching can help improve quality of service, especially with servers that may experience 
+high volumes of traffic. A cache is also known as a proxy server, it will store recently accessed
+data for a predetermined amount of time. That way, when a client makes a request, the cache will be checked first. If the requested information
+is in the cache, then that will be returned to the client. If it is not, then the request will continue
+to the intended server. This will decrease the amount of traffic going to the main server and improve bandwidth
+speed, this is especiially important in a company that may rely on the efficiancy of their servers. 
+
+10. Reasons to suspend a process: if it makes a request that would take a significant amount of 
+resources or if the request would take a long time: eg opening a file. When that process has finished
+its request in the blocked state, then it can be allowed to be in the running state again. 
+Another reason to suspend a process is if there is a higher priority process that needs to be running
+eg. OS process vs application process, then you would suspend the lower priority process in favor 
+of the high priority process, and once the higher priority process is done running, you can restore
+the lower priority process. 
+
+11. Weighted fair queuing is employed to make sure processes with lower priority packets are still
+given time to go outbound, and are not continuously being halted in favor of higher priority packets
+YOu can either split the circuit by 
+FDM (frequency division multiplexing) 
+- bandwidth is split between different users so the users all get to send out packets on the server
+or TDM (Time division multiplexing)
+- chunks of time is split between different users, so the users all get to send out packets on the server
+
+eg. You have a laptop and a smart phone being used in the same circuit. In FDM, the different users will be 
+allocated different bandwiths, and they share the circuit like that, so all users have seemingly uninterrupted connection
+In TDM the chunks of time are split between the laptop adn phone so they both have smooth connections, even if the
+lap top is actively trying to down load a file and the phone is sending out an imessage once every few minutes. 
+
+
+12. 
+#include <iostream>
+#include <string>
+#include <list>
+using namespace std;
+
+
+class Person{
+    string name;
+    
+public:
+    list<Clothing*> owned; 
+
+    Person(): name("Jane Doe"){}
+
+    Person(string newName): name(newName){}
+
+    string getName(){return name;}
+
+    bool purchase(Clothing* newClothing){
+        if(newClothing->isOwned() == false){
+            owned.push_back(newClothing);
+            newClothing->owner = this;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    void trade(Clothing* item1, Clothing* item2){
+        item1->owner = item2->owner;
+        item2->owner = this;
+        owned.remove(item1);
+        item2->owner->owned.remove(item2);
+    }
+
+
+    void operator<<(Clothing rhs){
+        cout<<getName()<<"Owns:"<<endl;
+        for(auto it = owned.begin(); it != owned.end(); it++){
+            cout<<(*it)->getType()<<endl;
+        }
+    }
+};
+
+class Clothing{
+    string type;
+    
+public:
+    Person* owner;
+    
+    Clothing(string newType) : type(newType), owner(nullptr){}
+
+    string getType(){return type;}
+
+    bool isOwned(){
+        if(owner != nullptr){
+            return true;
+        }
+    }
+
+};
