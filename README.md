@@ -13,4 +13,4 @@ Basic proficiency in college algebra and some exposure to C++ is recommended for
 # Notes
 I did not have any programming background going into this course. My undergraduate degree was in Animal Science.
 The homeworks and exams are what I submitted to be graded, they have NOT been corrected. 
-I earned a ### [Certificate with Distinction] in this course. 
+I earned a ### Certificate with Distinction in this course. 
