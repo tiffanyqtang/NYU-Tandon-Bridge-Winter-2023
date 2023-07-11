@@ -1,0 +1,194 @@
+Name: Tiffany Tang
+ 
+
+NYU Email: tt2405@nyu.edu
+
+
+
+
+Solutions to midterm exam
+
+
+Question 1 (Multiple choice answer):
+A. 
+an iterator is a pointer, so we can just use pointer addition to advance it to the next item. 
+
+Question 2 (Multiple choice answer):
+C.
+the last item pushed onto the stack is the first item popped out.
+
+Question 3 (Multiple choice answer):
+C. 
+although you want a semicolon after [virtual void func()=0;
+]
+Question 4 (Provide Code): - RECHECK?
+Since the derived class inherits the public functions of the base class, you would not need to overload that
+function to access the base class's private data member. Calling the base class's setter would 
+do that for you
+Question 5 (short section of code):
+Given a node pointer. Checking to see if the node's parent's left is equal to the node, or 
+if the node's parent's right is equal to the node. 
+
+if(node-> parent -> left == node){
+    cout<<"I am the left child";
+}
+else{
+    cout<<"I am the right child";
+}
+
+Question 6 (Algorithm; english answer):
+Have sufficient ram- MERGE SORT.
+Merge sort runs in O(n log n) time, but will take up a lot of space. Since space is not an issue, 
+and you want to focus on speed- I would use Merge Sort (quicksort worst case would be o(n^2)). 
+Merge sort will recursively split the array into smaller and smaller pieces, then when it comes time
+to merge it all together, it will compare the pieces with each other, before putting them in their correct place.
+
+Question 7 (Algorithm; english answer): - come back to 
+AVL trees are height based. The heights of the nodes cannot differ by more than 1, or else it would
+need to be rebalanced. 
+
+I would create a recursive function that would traverse the left side of the tree and +1 each time the function is 
+called (increasing the left height) and do the same with the right.
+If the left height differs more than the right height by a value greater than 1, the function would break and return false.
+Worst case runtime O(n), if every node on the tree is visited. 
+If the function breaks before every node is visited, run time would be less.
+
+Question 8: (Program):
+My program is not outputting anything and sorting incorrectly and I am very stressed.
+My intentions for this program:
+create a person class that has that person's name and integer. 
+get each line of the input file and store it into a string called line. Since strings operate the same as vectors, 
+I would go through each string, and if the char is a digit- store it in num(finding its int value using ascii values)
+build the name up if the character is a letter.
+once that line has been traversed through, I would push the number onto vector v, 
+and create a temp Person with that name and number. Then push that person onto a person vector.
+I would use the included sort algorithm to sort the numbers vector, 
+then as I am going through the sorted numbers vector, I would find the corresponding ID in the 
+person vector, and outstream that person's id and number. 
+This should produce a file with the sorted information.
+I ran out of time to figure out what the issue is. 
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Person{
+private:
+    int ID;
+    string name;
+public:
+    Person(int newID = 0, string newName = " "): ID(newID), name(newName){}
+    int getID()const{return ID;}
+    string getName()const{return name;}
+    void setID(int newID){ID = newID;}
+    void setName(string newName){name = newName;}
+};
+
+void reorganize(ifstream& inFile){
+    string fileName;
+    ofstream outFile;
+     cout<<"What is the file name?"<<endl;
+    cin>>fileName;
+    inFile.open(fileName);
+    while(!inFile){
+        cout<<"Error"<<endl;
+        inFile.clear();
+        
+        cout<<"What is the file name?"<<endl;
+        cin>>fileName;
+        inFile.open(fileName);
+    }
+    string tempName;
+    string line;
+    int num;
+    char c;
+    Person temp;
+    vector<Person> v;
+    vector<int> justNum;
+    while(inFile){
+        getline(inFile, line);
+        for(int i = 0; i < line.size(); i++){
+            c = line[i]; /traversing line letter by letter;
+
+            if(isdigit(c)){
+                num = c - '0';
+                
+            }
+            else if(isalpha(c)){
+                tempName +=c;
+            }
+        
+            else if(i == line.size()-1) //end of line, push my number and name onto appropriate vectors
+                temp.setID(num);
+                temp.setName(tempName);
+                v.push_back(temp);
+                justNum.push_back(num);
+                tempName.clear();   
+            }
+            }
+    }
+    outFile.open(fileName);
+    sort(justNum.begin(), justNum.end()); //sort numbers vector
+    for(int i = 0; i < justNum.size();i++){ //
+       for(int j = 0; j< justNum.size(); j++){
+        if(v[j].getID() == justNum[i]){ //if id num matches the num in justNums vector, output that person onto an outfile
+            outFile<<v[j].getID()<<'\t'<<v[j].getName()<<endl;
+        }
+       }
+    }
+
+
+int main(){
+    ifstream inFile;
+    reorganize(inFile);
+    cout<<"done.";
+
+    return 0;
+}
+
+Question 9: (Function):
+1. recursively go through the BST tree in an INORDER TRAVERSAL and push values onto a vector. O(n)
+    do this via helper function
+2. Go through the SORTED LList and push values onto a vector. O(n)
+    do this via helper function
+3. both of these vectors should be sorted at this point. 
+4. if both of the vectors are the same, then each index should have the same value. 
+    We will compare the values at each index of the vector. If one differs, return false.
+    start the bool off as true, that way if there are no differences, it will default 
+    return true; O(n)
+
+void bstToVect(BSTNode* root, vector<int>& BSTval){//must pass vector by reference to update
+    if(node!=nullptr){//in order traversal is Left, data, right
+        bstToVect(root->left, BSTval);
+        BSTval.push_back(root->data);
+        bstToVecto(root->right, BSTval)
+    }
+}
+
+void LLtoVal(LListNode* head, vector<int>* LLval){
+    LListNode* next = head;
+    if(next != nullptr){
+        LLval.push_back(next->data);
+        next = next -> next;
+    }
+}
+
+bool compare (BSTNode* root, LListNode* head){
+    vector<int> BSTval;
+    vector<int> LLval;
+
+    bstToVect(root, BSTval); //push BST values onto vector via in order traversal so it is SORTED
+    LLtoVal(head, LLval); //LList is already SORTED, push onto vector
+    //vectors should be sorted at this point
+    bool isSame = true;
+    for(int i = 0; i < BSTval.size(); i++){ //if the value differs at any index, the flag will be changed to false,
+        if(BSTval[i] != LLval[i]){
+            isSame = false;
+        }
+    }
+    return isSame;
+}
+
